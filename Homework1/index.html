@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sk">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Popis pod google vyhladavanim (zvycajne)">
+		<meta name="author" content="Chrom">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Reader</title>
+
+		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/styly.css">
+		
+	</head>
+	<body onload="getData()">
+		<div class="container">
+			<div class="header">
+				<form>
+					<label><input type="checkbox" name="info" value="info" checked>Info</label>
+					<label><input type="checkbox" name="trace" value="trace" checked>Trace</label>
+					<label><input type="checkbox" name="warning" value="warning" checked>Warning</label>
+					<label><input type="checkbox" name="event" value="event" checked>Event</label>
+					<label><input type="checkbox" name="proterr" value="proterr" checked>Proterr</label>
+					<label><input type="checkbox" name="sorted" value="sorted">Sorted</label>
+				</form>
+				<button onclick="getData()">Show</button>
+			</div>
+			<div id="dataContainer">
+				
+			</div>
+		</div>
+		<script>
+			function getData(){
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if(this.readyState == 4 && this.status == 200){
+						document.getElementById("dataContainer").innerHTML = this.responseText;
+					}
+				};
+
+				let postStr = "";
+				let frm = document.forms[0];
+				for(let i = 0; i < frm.elements.length; i++){
+					if(frm[i].checked)
+						postStr += frm[i].name + "=" + frm[i].value + "&";
+				}
+				postStr = postStr.slice(0,postStr.length - 1);
+				
+				xmlhttp.open("POST", "log_show.php", true);
+				xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xmlhttp.send(postStr);
+			}
+		</script>
+	</body>
+</html>
